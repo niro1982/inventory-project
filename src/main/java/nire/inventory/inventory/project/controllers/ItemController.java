@@ -3,6 +3,7 @@ package nire.inventory.inventory.project.controllers;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import io.swagger.annotations.ApiOperation;
 import nire.inventory.inventory.project.constants.ItemConstants;
 import nire.inventory.inventory.project.domain.Item;
 import nire.inventory.inventory.project.services.ItemService;
@@ -16,7 +17,7 @@ import java.util.Optional;
 import java.util.Set;
 
 @RestController
-@RequestMapping(value = "/store")
+@RequestMapping(value = "/inventory")
 public class ItemController {
 
     private final ItemService itemService;
@@ -26,19 +27,22 @@ public class ItemController {
         this.itemService = itemService;
     }
 
-    @GetMapping(value = "/inventory")
+    @ApiOperation(value = "View all items in the inventory", response = ResponseEntity.class)
+    @GetMapping(value = "/items", produces = "application/json")
     public ResponseEntity<?> getInventoryItems(){
             return ResponseEntity.ok().body(itemService.getInventoryItems());
 
     }
 
-    @GetMapping(value = "/item{id}")
-    public ResponseEntity<Item> getItemByItemNumber(@RequestParam("id") Long itemNumber) {
+    @ApiOperation(value = "Retrieve and item from the inventory by item number", response = ResponseEntity.class)
+    @GetMapping(value = "/item/{id}", produces = "application/json")
+    public ResponseEntity<Item> getItemByItemNumber(@PathVariable(value = "id")  Long itemNumber) {
         return Optional.ofNullable(itemService.getItemByItemNumber(itemNumber)).map(item -> ResponseEntity.ok().body(item))
                 .orElseGet(()-> ResponseEntity.notFound().build());
     }
 
-    @PutMapping(value = "/withdraw/{id}")
+    @ApiOperation(value = "Withdraw an amount of items from the inventory by item number", response = ResponseEntity.class)
+    @PutMapping(value = "/withdraw/{id}", produces = "application/json")
     public ResponseEntity withdrawAnAmountOfItemsById(@PathVariable(value = "id")  Long itemNumber, @RequestBody String amountStr) {
         ResponseEntity responseEntity;
         Integer amount = getAmountAsInteger(amountStr);
@@ -56,7 +60,8 @@ public class ItemController {
         return responseEntity;
     }
 
-    @PutMapping(value = "/deposit/{id}")
+    @ApiOperation(value = "Deposit an amount of items to the inventory by item number", response = ResponseEntity.class)
+    @PutMapping(value = "/deposit/{id}", produces = "application/json")
     public ResponseEntity depositAnAmountOfItemsById(@PathVariable(value = "id") Long itemNumber, @RequestBody String amountStr) {
         ResponseEntity responseEntity;
         Integer amount = getAmountAsInteger(amountStr);
@@ -73,12 +78,14 @@ public class ItemController {
         return responseEntity;
     }
 
-    @PostMapping(value = "/createItem")
+    @ApiOperation(value = "Add a new item to the inventory", response = ResponseEntity.class)
+    @PostMapping(value = "/createItem", produces = "application/json")
     public ResponseEntity<Item> addItemToStock(@RequestBody Item item){
         return new ResponseEntity<Item>(itemService.addItemToStock(item), HttpStatus.CREATED);
     }
 
-    @DeleteMapping (value = "/deleteItem/{id}")
+    @ApiOperation(value = "Remove an item to the inventory", response = ResponseEntity.class)
+    @DeleteMapping (value = "/deleteItem/{id}", produces = "application/json")
     public ResponseEntity deleteItemFromStock(@PathVariable(value = "id") Long itemNumber){
         boolean isDeleted = itemService.deleteItemFromStock(itemNumber);
         if (isDeleted){

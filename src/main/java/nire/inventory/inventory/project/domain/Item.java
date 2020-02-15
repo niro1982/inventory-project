@@ -1,5 +1,7 @@
 package nire.inventory.inventory.project.domain;
 
+import io.swagger.annotations.ApiModelProperty;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -11,13 +13,19 @@ public class Item {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @ApiModelProperty(notes = "The item's number")
     private Long itemNumber;
 
     @NotNull
+    @ApiModelProperty(notes = "The item's name")
     private String name;
+
     @NotNull
+    @ApiModelProperty(notes = "The amount of this item in the inventory")
     private Integer amount;
+
     @NotNull
+    @ApiModelProperty(notes = "The item's code in the inventory")
     private String inventoryCode;
 
     public Item() {
