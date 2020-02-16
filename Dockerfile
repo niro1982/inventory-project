@@ -1,11 +1,7 @@
 FROM openjdk:8-jdk-alpine
-
-WORKDIR /usr/src/app
-COPY ./classes/artifacts/inventory_project_jar inventory_project.jar
-
-
+COPY target/inventory-spring-boot-app.jar inventory-spring-boot-app.jar
 EXPOSE 8080
-CMD ["java", "-jar", "-Dspring.profiles.active=default", "./inventory_project.jar"]
+ENTRYPOINT ["java", "-jar", "inventory-spring-boot-app.jar"]
 
 
 
