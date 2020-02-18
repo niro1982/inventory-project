@@ -16,7 +16,7 @@ import java.util.LinkedHashMap;
 import java.util.Optional;
 import java.util.Set;
 
-@RestController
+@RestController @CrossOrigin(origins = "http://localhost:4200")
 @RequestMapping(value = "/inventory")
 public class ItemController {
 
